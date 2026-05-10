@@ -1,21 +1,23 @@
-# API de Trazabilidad Logística 📦
+# TrackPro by NexLogix 📦
 
-Una API RESTful robusta para la gestión y trazabilidad de paquetes logísticos. Construida con Python, FastAPI, SQLModel, PostgreSQL y protegida con JSON Web Tokens (JWT).
+Una plataforma completa (API RESTful + Frontend Web) para la gestión y trazabilidad de paquetes logísticos. 
 
-## 🚀 Características
-- **CRUD Completo:** Creación, lectura, actualización y eliminación de paquetes.
-- **Validación Estricta:** Uso de Enums para estados de envío (`PENDIENTE`, `EN_TRANSITO`, `ENTREGADO`, `CANCELADO`).
-- **Historial de Movimientos:** Trazabilidad automática de cada cambio de estado o ubicación de un paquete.
-- **Seguridad:** Autenticación de usuarios y protección de rutas mediante tokens JWT y contraseñas encriptadas con Bcrypt.
-- **Dockerizado:** Base de datos PostgreSQL lista para usar con Docker Compose.
+## 🚀 Características Principales
 
-## 🛠️ Tecnologías
-- Python 3.10+
-- FastAPI
-- SQLModel (SQLAlchemy + Pydantic)
-- PostgreSQL
-- PyJWT & Bcrypt
-- Docker
+### Backend (API)
+- **Construcción Robusta:** Desarrollada con Python, FastAPI, SQLModel y PostgreSQL.
+- **Seguridad JWT:** Autenticación de administradores con JSON Web Tokens y contraseñas encriptadas con Bcrypt.
+- **Historial Automatizado:** Trazabilidad inmutable de cada cambio de estado o ubicación de los paquetes.
+- **CORS Habilitado:** API configurada para aceptar peticiones web cruzadas de forma segura.
+
+### Frontend (Web Dashboard)
+- **Diseño Premium:** Interfaz de usuario moderna estilo *Glassmorphism* (Cristal), modo oscuro y animaciones fluidas, construida con Vanilla HTML/CSS/JS.
+- **Rastreo Público:** Buscador de guías en tiempo real para clientes finales, mostrando una línea de tiempo del paquete (sin requerir contraseña).
+- **Panel Administrativo:** Tablero privado protegido por inicio de sesión, que permite visualizar todos los paquetes y actualizar sus estados y ubicaciones fácilmente mediante un Modal interactivo.
+
+## 🛠️ Tecnologías Utilizadas
+- **Backend:** Python 3.10+, FastAPI, SQLModel, PostgreSQL, PyJWT, Bcrypt, Uvicorn, Docker.
+- **Frontend:** HTML5, CSS3 (Vanilla), JavaScript (ES6+), Fetch API.
 
 ## ⚙️ Instalación y Uso Local
 
@@ -32,7 +34,6 @@ Una API RESTful robusta para la gestión y trazabilidad de paquetes logísticos.
    ```
 
 3. **Instalar Dependencias:**
-   Se recomienda usar un entorno virtual:
    ```bash
    pip install -r requirements.txt
    ```
@@ -42,11 +43,19 @@ Una API RESTful robusta para la gestión y trazabilidad de paquetes logísticos.
    uvicorn main:app --reload
    ```
 
-5. **Probar la API:**
-   Abre tu navegador y ve a: [http://localhost:8000/docs](http://localhost:8000/docs) para ver la documentación interactiva de Swagger UI.
+5. **Abrir la Página Web (Frontend):**
+   No es necesario un servidor web adicional para el frontend. Simplemente abre el archivo ubicado en `frontend/index.html` haciendo doble clic en él, o ejecútalo desde tu terminal de Windows usando:
+   ```cmd
+   start frontend\index.html
+   ```
 
-## 🔐 Autenticación
-Para probar los endpoints protegidos en Swagger, primero debes:
-1. Crear un usuario en la ruta `POST /usuarios/`.
-2. Hacer clic en el botón verde **"Authorize"** en la esquina superior derecha.
-3. Iniciar sesión con tus credenciales para obtener un Token JWT temporal.
+## 🔐 Uso de la Plataforma
+
+- **Como Cliente:** En la página web principal, ingresa cualquier número de guía válido para ver su historial en vivo a través del buscador.
+- **Como Administrador:** 
+  1. Si no tienes un usuario creado, créalo primero directamente en la documentación de la API en [http://localhost:8000/docs](http://localhost:8000/docs) (ruta `POST /usuarios/`).
+  2. En la página web, ve a la pestaña "Acceso Admin" e inicia sesión con tus credenciales.
+  3. Gestiona y actualiza los paquetes directamente desde la tabla visual con el Modal interactivo.
+
+---
+Desarrollado como proyecto Fullstack Integral.
