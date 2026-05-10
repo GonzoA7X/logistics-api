@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics API | Rastreo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo">📦 TrackPro <span style="font-size: 0.8rem; font-weight: 300; color: var(--text-muted);">by NexLogix</span></div>
+        <div class="nav-links">
+            <button id="btn-rastreo" class="active" onclick="showTab('rastreo')">Rastreo Público</button>
+            <button id="btn-admin" onclick="showTab('admin')">Acceso Admin</button>
+            <button id="btn-logout" class="hidden" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- RASTREO PÚBLICO -->
+        <section id="tab-rastreo" class="glass-card">
+            <h1>Rastrea tu Paquete</h1>
+            <p>Ingresa tu número de guía para conocer el estatus en tiempo real.</p>
+            <div class="search-box">
+                <input type="text" id="input-guia" placeholder="Ej: MX-11122" autocomplete="off">
+                <button onclick="buscarPaquete()">Buscar</button>
+            </div>
+            
+            <div id="resultado-rastreo" class="hidden">
+                <div class="status-badge" id="badge-estado">PENDIENTE</div>
+                <h3 id="res-guia"></h3>
+                <p id="res-destino"></p>
+                
+                <div class="timeline" id="timeline-movimientos">
+                    <!-- Movimientos inyectados por JS -->
+                </div>
+            </div>
+            <p id="error-rastreo" class="error-text hidden"></p>
+        </section>
+
+        <!-- ADMIN LOGIN -->
+        <section id="tab-admin" class="glass-card hidden">
+            <div id="login-section">
+                <h1>Acceso Restringido</h1>
+                <p>Inicia sesión para gestionar paquetes.</p>
+                <div class="form-group">
+                    <input type="text" id="admin-user" placeholder="Usuario">
+                    <input type="password" id="admin-pass" placeholder="Contraseña">
+                    <button onclick="login()">Iniciar Sesión</button>
+                </div>
+                <p id="error-login" class="error-text hidden"></p>
+            </div>
+
+            <!-- ADMIN DASHBOARD -->
+            <div id="dashboard-section" class="hidden">
+                <h2>Panel de Control</h2>
+                <div class="admin-actions" style="margin-bottom: 1rem;">
+                    <button onclick="cargarPaquetesAdmin()">↻ Refrescar Lista</button>
+                </div>
+                <div class="table-container">
+                    <table class="glass-table">
+                        <thead>
+                            <tr>
+                                <th>Guía</th>
+                                <th>Estado</th>
+                                <th>Destino</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-paquetes">
+                            <!-- Inyectado por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Actualizar Paquete -->
+    <div id="modal-update" class="modal hidden">
+        <div class="glass-card modal-content">
+            <h3>Actualizar Paquete <span id="modal-guia"></span></h3>
+            <input type="hidden" id="modal-id">
+            <select id="modal-estado">
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="EN_TRANSITO">En Tránsito</option>
+                <option value="ENTREGADO">Entregado</option>
+                <option value="CANCELADO">Cancelado</option>
+            </select>
+            <input type="text" id="modal-ubicacion" placeholder="Ubicación Actual (Obligatorio)">
+            <div class="modal-buttons">
+                <button onclick="guardarActualizacion()" class="btn-primary">Guardar</button>
+                <button onclick="cerrarModal()" class="btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
