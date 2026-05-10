@@ -1,61 +1,57 @@
-# TrackPro by NexLogix 📦
+# TrackPro API & Dashboard
 
-Una plataforma completa (API RESTful + Frontend Web) para la gestión y trazabilidad de paquetes logísticos. 
+TrackPro es una plataforma Fullstack de trazabilidad logística que desarrollé para consolidar mis conocimientos en desarrollo Backend moderno y diseño Frontend sin frameworks. 
 
-## 🚀 Características Principales
+El sistema permite rastrear paquetes en tiempo real a través de un portal público, mientras provee un dashboard administrativo protegido para gestionar los estados de envío mediante una API RESTful.
 
-### Backend (API)
-- **Construcción Robusta:** Desarrollada con Python, FastAPI, SQLModel y PostgreSQL.
-- **Seguridad JWT:** Autenticación de administradores con JSON Web Tokens y contraseñas encriptadas con Bcrypt.
-- **Historial Automatizado:** Trazabilidad inmutable de cada cambio de estado o ubicación de los paquetes.
-- **CORS Habilitado:** API configurada para aceptar peticiones web cruzadas de forma segura.
+## Arquitectura y Tecnologías
 
-### Frontend (Web Dashboard)
-- **Diseño Premium:** Interfaz de usuario moderna estilo *Glassmorphism* (Cristal), modo oscuro y animaciones fluidas, construida con Vanilla HTML/CSS/JS.
-- **Rastreo Público:** Buscador de guías en tiempo real para clientes finales, mostrando una línea de tiempo del paquete (sin requerir contraseña).
-- **Panel Administrativo:** Tablero privado protegido por inicio de sesión, que permite visualizar todos los paquetes y actualizar sus estados y ubicaciones fácilmente mediante un Modal interactivo.
+He mantenido la arquitectura lo más limpia y modular posible, evitando dependencias innecesarias cuando las herramientas nativas son suficientes.
 
-## 🛠️ Tecnologías Utilizadas
-- **Backend:** Python 3.10+, FastAPI, SQLModel, PostgreSQL, PyJWT, Bcrypt, Uvicorn, Docker.
-- **Frontend:** HTML5, CSS3 (Vanilla), JavaScript (ES6+), Fetch API.
+**Backend:**
+- **FastAPI**: Elegido por su velocidad y soporte nativo para asincronismo y validación de tipos (Pydantic).
+- **SQLModel / SQLAlchemy**: ORM para la gestión de la base de datos y validación de esquemas.
+- **PostgreSQL**: Motor de base de datos relacional (desplegado vía Docker).
+- **Seguridad**: JWT (JSON Web Tokens) para manejo de sesiones y `bcrypt` crudo para el hashing de contraseñas.
 
-## ⚙️ Instalación y Uso Local
+**Frontend:**
+- **Vanilla JS, HTML5, CSS3**: Decidí no utilizar frameworks (como React o Tailwind) para demostrar dominio puro del DOM y CSS moderno (implementando un patrón Glassmorphism y Dark Mode desde cero).
+- Consumo asíncrono de la API mediante Fetch.
 
-1. **Clonar el repositorio:**
+## Instalación y Ejecución Local
+
+Para levantar el entorno local, asegúrate de tener Docker y Python 3.10+ instalados.
+
+1. **Clonar y preparar entorno:**
    ```bash
    git clone <URL_DE_TU_REPOSITORIO>
    cd logistics_api
+   python -m venv venv
+   source venv/bin/activate  # En Windows usa: venv\Scripts\activate
+   pip install -r requirements.txt
    ```
 
-2. **Levantar la Base de Datos:**
-   Asegúrate de tener Docker abierto y ejecuta:
+2. **Levantar base de datos:**
    ```bash
    docker-compose up -d
    ```
 
-3. **Instalar Dependencias:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Ejecutar la API:**
+3. **Iniciar servidor:**
    ```bash
    uvicorn main:app --reload
    ```
 
-5. **Abrir la Página Web (Frontend):**
-   No es necesario un servidor web adicional para el frontend. Simplemente abre el archivo ubicado en `frontend/index.html` haciendo doble clic en él, o ejecútalo desde tu terminal de Windows usando:
-   ```cmd
-   start frontend\index.html
-   ```
+4. **Acceder a la aplicación:**
+   Abre el archivo `frontend/index.html` en tu navegador, o consulta la documentación interactiva de la API en `http://localhost:8000/docs`.
 
-## 🔐 Uso de la Plataforma
+## Retos Técnicos Superados
 
-- **Como Cliente:** En la página web principal, ingresa cualquier número de guía válido para ver su historial en vivo a través del buscador.
-- **Como Administrador:** 
-  1. Si no tienes un usuario creado, créalo primero directamente en la documentación de la API en [http://localhost:8000/docs](http://localhost:8000/docs) (ruta `POST /usuarios/`).
-  2. En la página web, ve a la pestaña "Acceso Admin" e inicia sesión con tus credenciales.
-  3. Gestiona y actualiza los paquetes directamente desde la tabla visual con el Modal interactivo.
+Durante el desarrollo, me enfrenté a un problema interesante relacionado con la seguridad. Inicialmente implementé `passlib` para manejar el cifrado de contraseñas. Sin embargo, al probar el registro de usuarios, la API devolvió un Error 500 de servidor.
 
----
-Desarrollado como proyecto Fullstack Integral.
+Al debugear el traceback y analizar los logs, descubrí que `passlib` tiene un bug de compatibilidad conocido con las versiones recientes de `bcrypt` (4.0+) en Python 3.12, ya que falla en la validación interna de los hashes. 
+
+En lugar de hacer un *downgrade* a una versión insegura o antigua de `bcrypt` para complacer a la librería, refactoricé el módulo de autenticación (`auth.py`) para deshacerme de `passlib` y consumir la API moderna de `bcrypt` de forma directa (`bcrypt.hashpw` y `bcrypt.checkpw`). Esto no solo resolvió el problema de raíz, sino que eliminó una dependencia obsoleta haciendo el sistema más ligero y fácil de mantener.
+
+## Próximos Pasos (Roadmap)
+- Implementar pruebas unitarias en Python.
+- Dockerizar la aplicación completa (Backend + Frontend) para producción.
